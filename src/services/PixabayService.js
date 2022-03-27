@@ -4,20 +4,16 @@ export const getData = async (keyword) => {
   const photosUrl = `https://pixabay.com/api/?key=${API_KEY}&q=${encodeURIComponent(keyword)}&image_type=photo;`
   const videosUrl = `https://pixabay.com/api/videos/?key=${API_KEY}&q=${encodeURIComponent(keyword)};`
 
-  try {
-    const photosResponse = await fetch(photosUrl)
-    const photos = await photosResponse.json()
-    const videosResponse = await fetch(videosUrl)
-    const videos = await videosResponse.json()
+  const photosResponse = await fetch(photosUrl)
+  const photos = await photosResponse.json()
 
-    for(const video of videos.hits) {
-      const response = await fetch(`https://i.vimeocdn.com/video/${video.picture_id}_640x360.jpg`)
-      video.previewImage = response.url
-    }
+  const videosResponse = await fetch(videosUrl)
+  const videos = await videosResponse.json()
 
-    return photos.hits.concat(videos.hits)
+  for(const video of videos.hits) {
+    const response = await fetch(`https://i.vimeocdn.com/video/${video.picture_id}_640x360.jpg`)
+    video.previewImage = response.url
   }
-  catch (error) {
-    return error
-  }
+
+  return photos.hits.concat(videos.hits)
 }

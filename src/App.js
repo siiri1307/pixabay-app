@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { ContentGrid } from "./components/ContentGrid";
-import Box from '@mui/material/Box';
-import { Modal, TextField } from "@mui/material";
+import { ContentGrid } from "./components/ContentGrid"
+import Box from "@mui/material/Box"
+import { Modal, TextField } from "@mui/material"
 import { Photo } from "./components/Photo"
 import { ModalBox } from "./components/ModalBox"
 import { CONTENT_TYPE } from "./constants/Constants"
@@ -17,6 +17,7 @@ function App() {
   })
   const [showModal, setShowModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState({})
+  const [error, setError] = useState(false)
 
   const handleOpenModal = (item) => {
     setSelectedItem(item)
@@ -34,7 +35,16 @@ function App() {
     const timeoutId = setTimeout(() => {
       console.log(`Calling the API with keyword ${keyword}`)
 
-      getData(keyword).then(data => setItems(data))
+      getData(keyword)
+        .then(data => {
+          setItems(data)
+          setError(false)
+        })
+        .catch(error => {
+          console.log(`Error: ${error}`)
+          setItems([])
+          setError(true)
+        })
     }, 500)
 
     return () => clearTimeout(timeoutId)
@@ -52,6 +62,7 @@ function App() {
           variant="standard">
         </TextField>
       </Box>
+      {error && <Box style={{ display: "flex", justifyContent: "center" }}>Something went wrong</Box>}
       <ContentGrid items={items} onItemClicked={handleOpenModal} />
       <Modal 
         open={showModal}
