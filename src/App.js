@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { ContentGrid } from "./components/ContentGrid"
+import { ContentGrid } from "components/ContentGrid"
 import Box from "@mui/material/Box"
 import { Modal, TextField } from "@mui/material"
-import { Photo } from "./components/Photo"
-import { ModalBox } from "./components/ModalBox"
-import { CONTENT_TYPE } from "./constants/Constants"
-import { Film } from "./components/Film"
-import { getData } from "./services/PixabayService"
+import { Photo } from "components/Photo"
+import { ModalBox } from "components/ModalBox"
+import { CONTENT_TYPE } from "constants/Constants"
+import { Film } from "components/Film"
+import { getData } from "services/PixabayService"
 
 function App() {
 
