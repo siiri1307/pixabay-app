@@ -7,9 +7,13 @@ import { ModalBox } from "components/ModalBox"
 import { CONTENT_TYPE } from "constants/Constants"
 import { Film } from "components/Film"
 import { getData } from "services/PixabayService"
+import { withLoading } from "components/withLoading"
+
+const ContentGridWithLoading = withLoading(ContentGrid)
 
 function App() {
 
+  const [isLoading, setIsLoading] = useState(false)
   const [items, setItems] = useState([])
   const [keyword, setKeyword] = useState(() => {
     const storedKeyword = localStorage.getItem("keyword")
@@ -34,14 +38,16 @@ function App() {
 
     const timeoutId = setTimeout(() => {
       console.log(`Calling the API with keyword ${keyword}`)
-
+      setIsLoading(true)
       getData(keyword)
         .then(data => {
+          setIsLoading(false)
           setItems(data)
           setError(false)
         })
         .catch(error => {
           console.log(`Error: ${error}`)
+          setIsLoading(false)
           setItems([])
           setError(true)
         })
@@ -63,7 +69,7 @@ function App() {
         </TextField>
       </Box>
       {error && <Box style={{ display: "flex", justifyContent: "center" }}>Something went wrong</Box>}
-      <ContentGrid items={items} onItemClicked={handleOpenModal} />
+      <ContentGridWithLoading isLoading={isLoading} items={items} onItemClicked={handleOpenModal} />
       <Modal 
         open={showModal}
         onClose={handleCloseModal}
